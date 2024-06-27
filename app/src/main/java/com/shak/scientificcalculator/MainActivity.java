@@ -325,8 +325,8 @@ public class MainActivity extends AppCompatActivity {
             if(result.equals("Error")){
                 tvSec.setText(R.string.error);
             } else {
-                tvSec.setText(exp);
-                edtMain.setText(result);
+                edtMain.setText(exp);
+                tvSec.setText(result);
             }
         });
     }
@@ -346,7 +346,7 @@ public class MainActivity extends AppCompatActivity {
         scaleY.start();
 
         //Beep
-        if (btnToggleSound.isChecked()) {
+        if (!btnToggleSound.isChecked()) {
             MediaPlayer mediaPlayer;
             if(view.getId() == R.id.btnEqual){
                 mediaPlayer = MediaPlayer.create(this, R.raw.equal_button_click);
@@ -386,6 +386,12 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public double apply(double... args) {
                             return Math.pow(args[0], args[1]);
+                        }
+                    })
+                    .operator(new Operator("!", 1, true, Operator.PRECEDENCE_POWER + 1) {
+                        @Override
+                        public double apply(double... args) {
+                            return factorial(args[0]);
                         }
                     })
                     .functions(
@@ -432,6 +438,16 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception e) {
             return "Error";
         }
+    }
+
+    private double factorial(double n) {
+        if (n < 0) return Double.NaN; // Factorial is not defined for negative numbers
+        if (n == 0 || n == 1) return 1;
+        double result = 1;
+        for (int i = 2; i <= n; i++) {
+            result *= i;
+        }
+        return result;
     }
 
 
